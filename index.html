@@ -1,7 +1,115 @@
-<style>
-body{height:100vh;width:100vw;margin:0;padding:0;overflow:hidden;font-family:system-ui,sans-serif;background:#f9fafb}
-.w{height:100vh;width:100vw;padding:0;margin:0;display:flex;flex-direction:column}
-.top{padding:8px 12px;flex-shrink:0;display:flex;align-items:center;justify-content:space-between;margin-bottom:0}
-.pgbar{margin:4px 0;height:3px;background:#e5e7eb;border-radius:2px;overflow:hidden}
-.stage{flex:1;overflow:hidden;display:flex;gap:8px;justify-content:center;align-items:flex-start;overflow-x:auto;padding-bottom:8px}
-</style>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>UPY Real Estate — Demo Interactiva</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body {
+      font-family: system-ui, sans-serif;
+      background:#f9fafb;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+    }
+    .w {
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding: 0;
+      margin: 0;
+    }
+    .top{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;padding: 12px;}
+    .dtitle{font-size:11px;color:#666;letter-spacing:.06em;text-transform:uppercase}
+    .rbtn{padding:4px 14px;font-size:11px;background:transparent;border:.5px solid #ccc;border-radius:20px;color:#666;cursor:pointer}
+    .rbtn:hover{background:#f0f0f0}
+    .pgbar{height:3px;background:#e5e7eb;border-radius:2px;margin-bottom:.9rem;overflow:hidden}
+    .pgfill{height:100%;background:#f97316;transition:width .4s}
+
+    /* NUEVO layout responsivo */
+    .stage {
+      width: 100vw;
+      height: 100%;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      padding: 0;
+      margin: 0;
+      /* Quita padding-bottom innecesario */
+    }
+    .demo-devices {
+      display: flex;
+      gap: 30px;
+      will-change: transform;
+      /* el scaling se aplica aquí por JS */
+    }
+    /* Opcional: asegúrate que los dispositivos y QR no tengan paddings/margins verticales */
+    .qrz { display:flex; flex-direction:column; align-items:center; gap:6px; flex-shrink:0; padding-top: 0 !important;}
+    @media (max-width: 768px) {
+      .demo-devices { gap: 10px; }
+    }
+
+    /* Resto de tus estilos... (tal como los tienes, o mantén los existentes) */
+    /* ...Puedes pegar aquí el resto de tu CSS antes del cierre de <style>... */
+  </style>
+</head>
+<body>
+  <div class="w">
+    <div class="top">
+      <div class="dtitle">UPY Real Estate — Demo Interactiva</div>
+      <button class="rbtn" onclick="resetAll()">Reiniciar Demo</button>
+    </div>
+    <div class="pgbar"><div class="pgfill" id="pg" style="width:0%"></div></div>
+    <div class="stage">
+      <div class="demo-devices">
+        <!-- QR -->
+        <div class="qrz">
+          <div class="qrbox" id="qrbox" onclick="startAll()">
+            <!-- ... QR SVG ... -->
+          </div>
+          <div class="qlbl">Toca para iniciar ambos flujos</div>
+          <div style="font-size:8px;color:#aaa;margin-top:2px">#12345</div>
+        </div>
+        <!-- WhatsApp Phone -->
+        <div class="pw">
+          <!-- ... contenido ... -->
+        </div>
+        <!-- UPY App -->
+        <div class="pw">
+          <!-- ... contenido ...-->
+        </div>
+        <!-- AI Panel -->
+        <div class="pw">
+          <!-- ... contenido ... -->
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Tus scripts originales aquí (incluso el de flujo, todo igual) -->
+
+  <script>
+    // Función para autoescalar dispositivos y QR al tamaño máximo posible
+    function scaleDemoDevices() {
+      const stage = document.querySelector('.stage');
+      const demo = document.querySelector('.demo-devices');
+      if (!stage || !demo) return;
+      // Define el tamaño natural del contenido demo (ajusta si tus dispositivos son más anchos)
+      const baseWidth = 710; // suma el ancho total de QR + 3 dispositivos + gaps
+      const baseHeight = 400; // el alto del dispositivo más alto (aprox)
+      const scaleX = stage.clientWidth / baseWidth;
+      const scaleY = stage.clientHeight / baseHeight;
+      const scale = Math.min(scaleX, scaleY, 1); // nunca a más del 100%
+      demo.style.transform = `scale(${scale})`;
+      demo.style.transformOrigin = 'top center';
+    }
+    window.addEventListener('resize', scaleDemoDevices);
+    window.addEventListener('DOMContentLoaded', scaleDemoDevices);
+    scaleDemoDevices();
+  </script>
+  <!-- Resto de tu JS como ya estaba -->
+</body>
+</html>
